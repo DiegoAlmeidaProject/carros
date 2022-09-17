@@ -1,11 +1,13 @@
 import 'package:carros/pages/api_response.dart';
-import 'package:carros/pages/home_page.dart';
-import 'package:carros/pages/login_api.dart';
-import 'package:carros/pages/usuario.dart';
+import 'package:carros/pages/carro/home_page.dart';
+import 'package:carros/pages/login/login_api.dart';
+import 'package:carros/pages/login/usuario.dart';
+import 'package:carros/utils/alert.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/app_button.dart';
 import 'package:carros/widgets/app_text.dart';
 import 'package:flutter/material.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -21,6 +23,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final _focussenha = FocusNode();
 
+  bool _showProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _body() {
+    //bool _showProgress = true; //Descomentar apenas para teste da animação circular de carregamento da ação no botão login,
     return Form(
       key: _formKey,
       child: Container(
@@ -56,8 +61,11 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 20,
             ),
-            AppButton("Login",
-            onPressed: _onClickLogin,),
+            AppButton(
+              "Login",
+              onPressed: _onClickLogin,
+              showProgress: _showProgress,
+            ),
           ],
         ),
       ),
@@ -75,17 +83,25 @@ class _LoginPageState extends State<LoginPage> {
 
     print("Login: $login, senha: $senha");
 
+    //SetState só pode ser chamado quando utilizamos StatefulWidget, só a utilizamos para redezenhar a tela, pois ele chama novamente o StatefulWidget, assim ele inicia o redesenho das telas
+    setState(() {
+      _showProgress = true;
+    });
+
     ApiResponse response = await LoginApi.login(login, senha);
     if (response.ok) {
-
       Usuario user = response.result;
 
       print(">>> $user");
 
-      push(context, HomePage());
+      push(context, HomePage(), replace: true);
     } else {
-      print(response.msg);
+      alert(context, response.msg);
     }
+
+    setState(() {
+      _showProgress = false;
+    });
   }
 
   String _validateLogin(String text) {
