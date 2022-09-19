@@ -19,19 +19,18 @@ class _HomePageState extends State<HomePage>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _initTabs();
+  }
 
+  _initTabs() async {
     _tabController = TabController(length: 3, vsync: this);
 
-    Future<int> future = Prefs.getInt("tabIdx");
-
-    future.then((int tabIdx) {
-      _tabController.index = tabIdx;
-    },);
+    int tabItx = await Prefs.getInt("tabIdx");
+    _tabController.index = tabItx;
 
     _tabController.addListener(() {  /*Apresenta o indice da tab\guia que utilizaremos para salvar um index, Utilizando o plugin shared_preferences 0.5.6*/
-        Prefs.setInt("tabIdx", _tabController.index);
+      Prefs.setInt("tabIdx", _tabController.index);
     },);
   }
 
