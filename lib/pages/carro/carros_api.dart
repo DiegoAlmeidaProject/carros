@@ -1,16 +1,37 @@
-
+import 'dart:convert' as convert;
 import 'carro.dart';
+import 'package:http/http.dart' as http;
+
+class TipoCarro {
+  static final String classicos =  "classicos";
+  static final String esportivos =  "esportivos";
+  static final String luxo =  "luxo";
+}
 
 class CarrosApi {
-  static Future<List<Carro>> getCarros() async {
-    final carros = List<Carro>();
+  static Future<List<Carro>> getCarros(String tipo) async {
 
-    await Future.delayed(Duration(seconds: 2));
+    var url = 'https://carros-springboot.herokuapp.com/api/v1/carros/tipo/$tipo';
 
-    carros.add(Carro(nome: "Renault Megane RS Trophi2", urlFoto: "https://s3-sa-east-1.amazonaws.com/videos.livetouchdev.com.br/esportivos/Renault_Megane_Trophy.png"));
-    carros.add(Carro(nome: "Ferrari FF", urlFoto: "https://s3-sa-east-1.amazonaws.com/videos.livetouchdev.com.br/esportivos/Maserati_Grancabrio_Sport.png"));
-    carros.add(Carro(nome: "MERCEDES-BENZ C63 AMG", urlFoto: "https://s3-sa-east-1.amazonaws.com/videos.livetouchdev.com.br/esportivos/MERCEDES_BENZ_AMG.png"));
+    print("GET >>> $url"); /*Acompahamento da requisição ao WS*/
 
-    return carros;
+    var response = await http.get(url);
+
+    String json = response.body;
+    //print(json); /*Print do json no log*/
+
+    List list = convert.json.decode(json);
+
+    /*Boa pratica do flutter fazer desta forma*/
+/*   final carros = list.map<Carro>((map) => Carro.fromJson(map)).toList();*/
+
+/*    for (Map map in list) {
+      Carro c = Carro.fromJson(map);
+      carros.add(c);
+    }
+*/
+    return list.map<Carro>((map) => Carro.fromJson(map)).toList();
+
+
   }
 }
