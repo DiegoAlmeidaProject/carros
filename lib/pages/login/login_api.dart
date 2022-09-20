@@ -34,8 +34,8 @@ class LoginApi {
         user.save();
 
         /*lendo usuario que foi passado no Prefs para posteriormente atualizar dados do login no menu*/
-        Usuario user2 = await Usuario.get();
-        print("user2: $user2");
+       // Usuario user2 = await Usuario.get();
+       // print("user2: $user2");
 
         return ApiResponse.ok(user);
       }
