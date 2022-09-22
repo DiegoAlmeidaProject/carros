@@ -21,10 +21,9 @@ class _CarrosListViewState extends State<CarrosListView> with AutomaticKeepAlive
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return _body();
-  }
 
-  _body() {
+    print("Home build, ${widget.tipo}");
+
     Future<List<Carro>> future = CarrosApi.getCarros(widget.tipo);
 
     return FutureBuilder(
