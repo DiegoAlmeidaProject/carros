@@ -14,9 +14,34 @@ class CarrosListView extends StatefulWidget {
 }
 
 class _CarrosListViewState extends State<CarrosListView> with AutomaticKeepAliveClientMixin<CarrosListView> {
+
+  List<Carro> carros;
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+
+/* //1° Versão do codigo de correção de load de lista de carros
+    Future<List<Carro>> future = CarrosApi.getCarros(widget.tipo);
+    future.then((List<Carro> carros) {
+      setState(() {
+        this.carros = carros;
+      });
+    });
+ */
+  _loadData();
+
+  }
+  _loadData() async {
+    List<Carro> carros = await CarrosApi.getCarros(widget.tipo);
+    setState(() {
+      this.carros = carros;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,33 +49,12 @@ class _CarrosListViewState extends State<CarrosListView> with AutomaticKeepAlive
 
     print("Home build, ${widget.tipo}");
 
-    Future<List<Carro>> future = CarrosApi.getCarros(widget.tipo);
+    if (carros == null) {
+      return Center(child: CircularProgressIndicator(),);
+    }
 
-    return FutureBuilder(
-      future: future,
-      builder: (context, snapshot) {
+    return _listView(carros);
 
-        if (snapshot.hasError) {
-          print(snapshot.error);
-          return Center(
-            child: Text(
-              "Não foi possivel buscar os carros!",
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 22,
-              ),
-            ),
-          );
-        }
-
-        if (! snapshot.hasData) {
-          return Center(child: CircularProgressIndicator(),);
-        }
-
-        List<Carro> carros = snapshot.data;
-        return _listView(carros);
-      },
-    );
   }
 
   Container _listView(List<Carro> carros) {
