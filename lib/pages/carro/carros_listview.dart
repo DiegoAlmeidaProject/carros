@@ -23,23 +23,15 @@ class _CarrosListViewState extends State<CarrosListView> with AutomaticKeepAlive
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
 
-/* //1° Versão do codigo de correção de load de lista de carros
     Future<List<Carro>> future = CarrosApi.getCarros(widget.tipo);
-    future.then((List<Carro> carros) {
-      setState(() {
-        this.carros = carros;
-      });
-    });
- */
-  _loadData();
 
-  }
-  _loadData() async {
-    List<Carro> carros = await CarrosApi.getCarros(widget.tipo);
-    setState(() {
-      this.carros = carros;
+    future.then((List<Carro> carros) {
+      setSatte() {
+        this.carros = carros;
+    };
     });
   }
 
