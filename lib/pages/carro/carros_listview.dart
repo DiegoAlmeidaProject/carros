@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:carros/pages/carro/carro.dart';
 import 'package:carros/pages/carro/carro_page.dart';
 import 'package:carros/pages/carro/carros_api.dart';
@@ -14,20 +16,33 @@ class CarrosListView extends StatefulWidget {
 }
 
 class _CarrosListViewState extends State<CarrosListView> with AutomaticKeepAliveClientMixin<CarrosListView> {
+  List<Carro> carros;
+  final _streamController = StreamController<List<Carro>>();
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
   @override
+  void initState(){
+    super.initState();
+    _loadCarros();
+  }
+
+  _loadCarros() async {
+    List<Carro> carros = await CarrosApi.getCarros(widget.tipo);
+    _streamController.add(carros);
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    print("Home build, ${widget.tipo}");
+    print("carrosListView build, ${widget.tipo}");
 
-    Future<List<Carro>> future = CarrosApi.getCarros(widget.tipo);
 
-    return FutureBuilder(
-      future: future,
+    return StreamBuilder(
+      stream: _streamController.stream,
       builder: (context, snapshot) {
 
         if (snapshot.hasError) {
