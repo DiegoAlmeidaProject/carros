@@ -131,4 +131,11 @@ class _CarrosListViewState extends State<CarrosListView> with AutomaticKeepAlive
     push(context, CarroPage(c));
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _streamController.close();
+  }
+
 }

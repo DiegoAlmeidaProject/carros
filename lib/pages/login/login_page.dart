@@ -141,4 +141,11 @@ class _LoginPageState extends State<LoginPage> {
     }
     return null;
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _streamController.close();
+  }
 }
