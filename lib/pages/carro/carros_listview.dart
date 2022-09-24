@@ -16,32 +16,14 @@ class CarrosListView extends StatefulWidget {
 }
 
 class _CarrosListViewState extends State<CarrosListView> with AutomaticKeepAliveClientMixin<CarrosListView> {
-<<<<<<< HEAD
-
-  List<Carro> carros;
-=======
   List<Carro> carros;
   final _streamController = StreamController<List<Carro>>();
->>>>>>> StreamsStreamBuilder
 
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
   @override
-<<<<<<< HEAD
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-    Future<List<Carro>> future = CarrosApi.getCarros(widget.tipo);
-
-    future.then((List<Carro> carros) {
-      setSatte() {
-        this.carros = carros;
-    };
-    });
-=======
   void initState(){
     super.initState();
     _loadCarros();
@@ -50,7 +32,6 @@ class _CarrosListViewState extends State<CarrosListView> with AutomaticKeepAlive
   _loadCarros() async {
     List<Carro> carros = await CarrosApi.getCarros(widget.tipo);
     _streamController.add(carros);
->>>>>>> StreamsStreamBuilder
   }
 
   @override
@@ -59,13 +40,6 @@ class _CarrosListViewState extends State<CarrosListView> with AutomaticKeepAlive
 
     print("carrosListView build, ${widget.tipo}");
 
-<<<<<<< HEAD
-    if (carros == null) {
-      return Center(child: CircularProgressIndicator(),);
-    }
-
-    return _listView(carros);
-=======
 
     return StreamBuilder(
       stream: _streamController.stream,
@@ -87,8 +61,11 @@ class _CarrosListViewState extends State<CarrosListView> with AutomaticKeepAlive
         if (! snapshot.hasData) {
           return Center(child: CircularProgressIndicator(),);
         }
->>>>>>> StreamsStreamBuilder
 
+        List<Carro> carros = snapshot.data;
+        return _listView(carros);
+      },
+    );
   }
 
   Container _listView(List<Carro> carros) {
@@ -152,13 +129,6 @@ class _CarrosListViewState extends State<CarrosListView> with AutomaticKeepAlive
 
   _onClickCarro(Carro c) {
     push(context, CarroPage(c));
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    _streamController.close();
   }
 
 }
