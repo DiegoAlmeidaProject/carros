@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
               height: 20,
             ),
             StreamBuilder<bool>(
-              stream: _bloc.stream, /*Se "Conecta a variavel _streamControllr"*/
+              stream: _bloc.buttonBloc.stream, /*Se "Conecta a variavel _streamControllr"*/
               builder: (context, snapshot) {
                 return AppButton(
                   "Login",

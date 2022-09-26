@@ -7,12 +7,12 @@ class SimpleBloc<T> {
 
   Stream<T> get stream => _controller.stream;
 
-  void add(T object){
+  void add(T object) {
     _controller.add(object);
   }
 
-  void addError(Object error){
-    if (! _controller.isClosed) {
+  void addError(Object error) {
+    if (!_controller.isClosed) {
       _controller.addError(error);
     }
   }
@@ -20,4 +20,8 @@ class SimpleBloc<T> {
   void dispose() {
     _controller.close();
   }
+}
+
+  class BooleanBloc extends SimpleBloc<bool> {
+
 }
