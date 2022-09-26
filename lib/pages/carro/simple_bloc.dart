@@ -20,5 +20,4 @@ class SimpleBloc<T> {
   void dispose() {
     _controller.close();
   }
-
 }
