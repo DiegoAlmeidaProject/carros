@@ -1,4 +1,5 @@
 import 'package:carros/pages/login/login_page.dart';
+import 'package:carros/splashpage.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light, //TODO: Tema padrão, podemos utilizar o DARK também.
         scaffoldBackgroundColor: Colors.white //TODO: Define a cor de fundo do container do scaffold
       ),
-      home: LoginPage(),
+      home: SplashPage(),
     );
   }
 }
