@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:carros/pages/carro/carros_api.dart';
-import 'package:carros/pages/carro/simple_bloc.dart';
+import 'package:carros/pages/carros/carros_api.dart';
+import 'package:carros/pages/carros/simple_bloc.dart';
 import 'carro.dart';
 
 class CarrosBloc extends SimpleBloc<List<Carro>> {
