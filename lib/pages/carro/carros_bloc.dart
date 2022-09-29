@@ -1,16 +1,27 @@
+import 'dart:async';
+
 import 'package:carros/pages/carro/carros_api.dart';
 import 'package:carros/pages/carro/simple_bloc.dart';
 import 'carro.dart';
 
 class CarrosBloc extends SimpleBloc<List<Carro>> {
+  final _streamControler = StreamController<List<Carro>>();
 
-  fetch(String tipo) async {
+  Stream<List<Carro>> get stream => _streamControler.stream;
+
+  Future<List<Carro>> fetch(String tipo) async {
     try {
       List<Carro> carros = await CarrosApi.getCarros(tipo);
-      add(carros);
+      _streamControler.add(carros);
+
+      return carros;
 
     } catch (e) {
-      addError(e);
+      _streamControler.addError(e);
     }
+  }
+
+  void dispose() {
+    _streamControler.close();
   }
 }

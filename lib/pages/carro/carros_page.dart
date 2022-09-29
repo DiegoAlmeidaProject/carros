@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:carros/pages/carro/carro.dart';
@@ -12,13 +11,15 @@ import 'package:flutter/material.dart';
 
 class CarrosPage extends StatefulWidget {
   String tipo;
+
   CarrosPage(this.tipo);
 
   @override
   State<CarrosPage> createState() => _CarrosPageState();
 }
 
-class _CarrosPageState extends State<CarrosPage> with AutomaticKeepAliveClientMixin<CarrosPage> {
+class _CarrosPageState extends State<CarrosPage>
+    with AutomaticKeepAliveClientMixin<CarrosPage> {
   List<Carro> carros;
 
   final _bloc = CarrosBloc();
@@ -30,19 +31,16 @@ class _CarrosPageState extends State<CarrosPage> with AutomaticKeepAliveClientMi
   bool get wantKeepAlive => true;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _bloc.fetch(tipo);
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
     print("carrosListView build, ${widget.tipo}");
-
 
     return StreamBuilder(
       stream: _bloc.stream,
@@ -52,16 +50,25 @@ class _CarrosPageState extends State<CarrosPage> with AutomaticKeepAliveClientMi
           return TextError("Não foi possivel buscar os carros!");
         }
 
-        if (! snapshot.hasData) {
-          return Center(child: CircularProgressIndicator(),);
+        if (!snapshot.hasData) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
         }
 
         List<Carro> carros = snapshot.data;
 
-        return CarrosListView(carros);
+        return RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: CarrosListView(carros),
+        );
       },
     );
   }
+
+  Future<void> _onRefresh() {
+    return _bloc.fetch(tipo);
+    }
 
   @override
   void dispose() {
