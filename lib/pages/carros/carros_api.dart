@@ -1,4 +1,5 @@
 import 'dart:convert' as convert;
+import 'package:carros/pages/favoritos/carro_dao.dart';
 import 'package:carros/pages/login/usuario.dart';
 
 import 'carro.dart';
@@ -42,6 +43,15 @@ class CarrosApi {
       Carro c = Carro.fromJson(map);
       carros.add(c);
     }
+*/
+      final dao = CarroDAO();
+
+      // salva todos os carros
+      carros.forEach(dao.save);
+
+/*      for (Carro c in carros) {
+        dao.save(c);
+      }
 */
       return carros;
     } catch (error, exception) {
