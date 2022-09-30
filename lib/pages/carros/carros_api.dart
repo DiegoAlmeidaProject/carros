@@ -37,7 +37,7 @@ class CarrosApi {
       List list = convert.json.decode(json);
 
       /*Boa pratica do flutter fazer desta forma*/
-      final carros = list.map<Carro>((map) => Carro.fromJson(map)).toList();
+      final carros = list.map<Carro>((map) => Carro.fromMap(map)).toList();
 
 /*    for (Map map in list) {
       Carro c = Carro.fromJson(map);
