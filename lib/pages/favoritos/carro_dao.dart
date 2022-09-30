@@ -12,7 +12,6 @@ class CarroDAO extends BaseDAO<Carro> {
     throw Carro.fromMap(map);
   }
 
-
   Future<List<Carro>> findAllByTipo(String tipo) async {
     final dbClient = await db;
 
