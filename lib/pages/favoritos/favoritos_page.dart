@@ -4,22 +4,17 @@ import 'package:carros/pages/carros/carros_listview.dart';
 import 'package:carros/widgets/text_error.dart';
 import 'package:flutter/material.dart';
 
-class CarrosPage extends StatefulWidget {
-  String tipo;
+import 'favoritos_bloc.dart';
 
-  CarrosPage(this.tipo);
-
+class FavoritosPage extends StatefulWidget {
   @override
-  _CarrosPageState createState() => _CarrosPageState();
+  _FavoritosPageState createState() => _FavoritosPageState();
 }
 
-class _CarrosPageState extends State<CarrosPage>
-    with AutomaticKeepAliveClientMixin<CarrosPage> {
-  List<Carro> carros;
+class _FavoritosPageState extends State<FavoritosPage>
+    with AutomaticKeepAliveClientMixin<FavoritosPage> {
 
-  String get tipo => widget.tipo;
-
-  final _bloc = CarrosBloc();
+  final _bloc = FavoritosBloc();
 
   @override
   bool get wantKeepAlive => true;
@@ -28,7 +23,7 @@ class _CarrosPageState extends State<CarrosPage>
   void initState() {
     super.initState();
 
-    _bloc.fetch(tipo);
+    _bloc.fetch();
   }
 
   @override
@@ -39,7 +34,7 @@ class _CarrosPageState extends State<CarrosPage>
       stream: _bloc.stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return TextError("Não foi possível buscar os carros");
+          return TextError("Não foi possível buscar os carros favoritados!");
         }
 
         if (!snapshot.hasData) {
@@ -59,7 +54,7 @@ class _CarrosPageState extends State<CarrosPage>
   }
 
   Future<void> _onRefresh() {
-    return _bloc.fetch(tipo);
+    return _bloc.fetch();
   }
 
   @override

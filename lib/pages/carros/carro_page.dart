@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carros/pages/carros/loripsum_api.dart';
+import 'package:carros/pages/favoritos/favorito_dao.dart';
+import 'package:carros/pages/favoritos/favorito_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +9,6 @@ import '../../widgets/text.dart';
 import 'carro.dart';
 
 class CarroPage extends StatefulWidget {
-
   Carro carro;
 
   CarroPage(this.carro);
@@ -19,8 +20,10 @@ class CarroPage extends StatefulWidget {
 class _CarroPageState extends State<CarroPage> {
   final _loripsumApiBloc = LoripsumBloc();
 
+  Carro get carro => widget.carro;
+
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     _loripsumApiBloc.fetch();
@@ -43,9 +46,19 @@ class _CarroPageState extends State<CarroPage> {
             PopupMenuButton<String>(
               onSelected: (String value) => _onClickPopupMenu(value),
               itemBuilder: (BuildContext context) {
-                return [PopupMenuItem(value: "Editar" ,child: Text("Editar"),),
-                PopupMenuItem(value: "Deletar" ,child: Text("Deletar"),),
-                PopupMenuItem(value: "Share" ,child: Text("Share"),),
+                return [
+                  PopupMenuItem(
+                    value: "Editar",
+                    child: Text("Editar"),
+                  ),
+                  PopupMenuItem(
+                    value: "Deletar",
+                    child: Text("Deletar"),
+                  ),
+                  PopupMenuItem(
+                    value: "Share",
+                    child: Text("Share"),
+                  ),
                 ];
               },
             ),
@@ -57,60 +70,70 @@ class _CarroPageState extends State<CarroPage> {
   _body() {
     return Container(
       padding: EdgeInsets.all(16),
-      child: ListView (
+      child: ListView(
         children: <Widget>[
-          CachedNetworkImage(
-              imageUrl:widget.carro.urlFoto),
+          CachedNetworkImage(imageUrl: widget.carro.urlFoto),
           _bloco1(),
           Divider(),
           _bloco2(),
         ],
-     ),
+      ),
     );
   }
 
   Row _bloco1() {
     return Row(
-          children:<Widget> [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget> [
-                  text(widget.carro.nome, fontSize: 20, bold: true),
-                  text(widget.carro.tipo, fontSize: 16),
-                ],
+      children: <Widget>[
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              text(widget.carro.nome, fontSize: 20, bold: true),
+              text(widget.carro.tipo, fontSize: 16),
+            ],
+          ),
+        ),
+        Row(
+          children: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.favorite,
+                color: Colors.red,
+                size: 40,
               ),
+              onPressed: _onClickFavorito,
             ),
-            Row(
-              children: <Widget> [
-                IconButton(
-                  icon: Icon(Icons.favorite, color: Colors.red, size: 40,),
-                  onPressed: _onClickFavorito,
-                ),
-                IconButton(
-                  icon: Icon(Icons.share, size: 40,),
-                  onPressed: _onClickShare,
-                ),
-              ],
+            IconButton(
+              icon: Icon(
+                Icons.share,
+                size: 40,
+              ),
+              onPressed: _onClickShare,
             ),
           ],
-        );
+        ),
+      ],
+    );
   }
 
-  _bloco2(){
+  _bloco2() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         text(widget.carro.descricao, fontSize: 16, bold: true),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
         StreamBuilder(
           stream: _loripsumApiBloc.stream,
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (!snapshot.hasData) {
-                return Center(child: CircularProgressIndicator(),);
-              }
-              return text(snapshot.data, fontSize: 16);
-            },
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return text(snapshot.data, fontSize: 16);
+          },
         ),
       ],
     );
@@ -121,7 +144,7 @@ class _CarroPageState extends State<CarroPage> {
   void _onClickVideo() {}
 
   _onClickPopupMenu(String value) {
-    switch(value) {
+    switch (value) {
       case "Editar":
         print("Editar !!!");
         break;
@@ -134,11 +157,11 @@ class _CarroPageState extends State<CarroPage> {
     }
   }
 
-  void _onClickFavorito() {
+  void _onClickFavorito() async {
+    FavoritoService.favoritar(carro);
   }
 
-  void _onClickShare() {
-  }
+  void _onClickShare() {}
 
   @override
   void dispose() {

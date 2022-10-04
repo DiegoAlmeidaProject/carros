@@ -6,7 +6,7 @@ import '../../utils/sql/base_dao.dart';
 class FavoritoDAO extends BaseDAO<Favorito> {
   @override
   Favorito fromMap(Map<String, dynamic> map) {
-    throw Favorito.fromMap(map);
+    Favorito.fromMap(map);
   }
 
   @override
