@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:carros/pages/carros/carros_api.dart';
 import 'package:carros/pages/carros/simple_bloc.dart';
-import 'package:carros/pages/favoritos/carro_dao.dart';
+import 'package:carros/pages/carros/carro_dao.dart';
 import 'package:carros/utils/network.dart';
 import 'carro.dart';
 
@@ -16,18 +16,25 @@ class CarrosBloc extends SimpleBloc<List<Carro>> {
 
       bool networkingOn = await isNetworkOn();
 
-      if (! networkingOn) {
+      if (!  await isNetworkOn()) {
         List<Carro> carros = await CarroDAO().findAllByTipo(tipo);
-
         _streamControler.add(carros);
-
         return carros;
       }
 
       List<Carro> carros = await CarrosApi.getCarros(tipo);
-      _streamControler.add(carros);
-      return carros;
 
+      if (carros.isNotEmpty) {
+
+      final dao = CarroDAO();
+      _streamControler.add(carros);
+      // salva todos os carros
+      carros.forEach(dao.save);
+      }
+
+      _streamControler.add(carros);
+
+      return carros;
     } catch (e) {
       _streamControler.addError(e);
     }
