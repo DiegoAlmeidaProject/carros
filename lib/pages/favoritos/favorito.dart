@@ -1,5 +1,6 @@
-import '../../utils/sql/entity.dart';
-import '../carros/carro.dart';
+
+import 'package:carros/pages/carros/carro.dart';
+import 'package:carros/utils/sql/entity.dart';
 
 class Favorito extends Entity {
 

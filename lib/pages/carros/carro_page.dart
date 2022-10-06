@@ -1,12 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carros/pages/carros/loripsum_api.dart';
-import 'package:carros/pages/favoritos/favorito_dao.dart';
-import 'package:carros/pages/favoritos/favorito_service.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
-import '../../widgets/text.dart';
-import 'carro.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carros/pages/carros/carro.dart';
+import 'package:carros/pages/carros/loripsum_api.dart';
+import 'package:carros/pages/favoritos/favorito_service.dart';
+import 'package:carros/widgets/text.dart';
+import 'package:flutter/material.dart';
 
 class CarroPage extends StatefulWidget {
   Carro carro;
@@ -14,11 +12,13 @@ class CarroPage extends StatefulWidget {
   CarroPage(this.carro);
 
   @override
-  State<CarroPage> createState() => _CarroPageState();
+  _CarroPageState createState() => _CarroPageState();
 }
 
 class _CarroPageState extends State<CarroPage> {
   final _loripsumApiBloc = LoripsumBloc();
+
+  Color color = Colors.grey;
 
   Carro get carro => widget.carro;
 
@@ -26,45 +26,53 @@ class _CarroPageState extends State<CarroPage> {
   void initState() {
     super.initState();
 
+    FavoritoService.isFavorito(carro).then((bool favorito) {
+      setState(() {
+        color = favorito ? Colors.red : Colors.grey;
+      });
+    });
+
     _loripsumApiBloc.fetch();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.carro.nome),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.place),
-              onPressed: _onClickMapa,
-            ),
-            IconButton(
-              icon: Icon(Icons.videocam),
-              onPressed: _onClickVideo,
-            ),
-            PopupMenuButton<String>(
-              onSelected: (String value) => _onClickPopupMenu(value),
-              itemBuilder: (BuildContext context) {
-                return [
-                  PopupMenuItem(
-                    value: "Editar",
-                    child: Text("Editar"),
-                  ),
-                  PopupMenuItem(
-                    value: "Deletar",
-                    child: Text("Deletar"),
-                  ),
-                  PopupMenuItem(
-                    value: "Share",
-                    child: Text("Share"),
-                  ),
-                ];
-              },
-            ),
-          ],
-        ),
-        body: _body());
+      appBar: AppBar(
+        centerTitle: false,
+        title: Text(widget.carro.nome),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.place),
+            onPressed: _onClickMapa,
+          ),
+          IconButton(
+            icon: Icon(Icons.videocam),
+            onPressed: _onClickVideo,
+          ),
+          PopupMenuButton<String>(
+            onSelected: _onClickPopupMenu,
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                  value: "Editar",
+                  child: Text("Editar"),
+                ),
+                PopupMenuItem(
+                  value: "Deletar",
+                  child: Text("Deletar"),
+                ),
+                PopupMenuItem(
+                  value: "Share",
+                  child: Text("Share"),
+                )
+              ];
+            },
+          )
+        ],
+      ),
+      body: _body(),
+    );
   }
 
   _body() {
@@ -72,7 +80,8 @@ class _CarroPageState extends State<CarroPage> {
       padding: EdgeInsets.all(16),
       child: ListView(
         children: <Widget>[
-          CachedNetworkImage(imageUrl: widget.carro.urlFoto),
+          CachedNetworkImage(
+              imageUrl:widget.carro.urlFoto),
           _bloco1(),
           Divider(),
           _bloco2(),
@@ -83,13 +92,14 @@ class _CarroPageState extends State<CarroPage> {
 
   Row _bloco1() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               text(widget.carro.nome, fontSize: 20, bold: true),
-              text(widget.carro.tipo, fontSize: 16),
+              text(widget.carro.tipo, fontSize: 16)
             ],
           ),
         ),
@@ -98,7 +108,7 @@ class _CarroPageState extends State<CarroPage> {
             IconButton(
               icon: Icon(
                 Icons.favorite,
-                color: Colors.red,
+                color: color,
                 size: 40,
               ),
               onPressed: _onClickFavorito,
@@ -109,9 +119,9 @@ class _CarroPageState extends State<CarroPage> {
                 size: 40,
               ),
               onPressed: _onClickShare,
-            ),
+            )
           ],
-        ),
+        )
       ],
     );
   }
@@ -119,12 +129,15 @@ class _CarroPageState extends State<CarroPage> {
   _bloco2() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
+        SizedBox(
+          height: 20,
+        ),
         text(widget.carro.descricao, fontSize: 16, bold: true),
         SizedBox(
           height: 20,
         ),
-        StreamBuilder(
+        StreamBuilder<String>(
           stream: _loripsumApiBloc.stream,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData) {
@@ -132,6 +145,7 @@ class _CarroPageState extends State<CarroPage> {
                 child: CircularProgressIndicator(),
               );
             }
+
             return text(snapshot.data, fontSize: 16);
           },
         ),
@@ -158,7 +172,11 @@ class _CarroPageState extends State<CarroPage> {
   }
 
   void _onClickFavorito() async {
-    FavoritoService.favoritar(carro);
+    bool favorito = await FavoritoService.favoritar(carro);
+
+    setState(() {
+      color = favorito ? Colors.red : Colors.grey;
+    });
   }
 
   void _onClickShare() {}

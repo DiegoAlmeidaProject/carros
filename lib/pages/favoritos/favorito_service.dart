@@ -1,10 +1,11 @@
 
 import 'package:carros/pages/carros/carro.dart';
+import 'package:carros/pages/carros/carro_dao.dart';
 import 'package:carros/pages/favoritos/favorito.dart';
 import 'package:carros/pages/favoritos/favorito_dao.dart';
 
 class FavoritoService {
-  static favoritar(Carro c) async {
+  static Future<bool> favoritar(Carro c) async {
 
     Favorito f = Favorito.fromCarro(c);
 
@@ -12,19 +13,31 @@ class FavoritoService {
 
     final exists = await dao.exists(c.id);
 
-    if (exists) {
-      //Remove dos favoritos
+    if(exists) {
+      // Remove dos favoritos
       dao.delete(c.id);
+
+      return false;
     } else {
-      //Adiciona no favoritos
+      // Adiciona nos favoritos
       dao.save(f);
+
+      return true;
     }
   }
 
-  static List<Carro> getCarros() {
-    List<Carro> carros = [];
+  static Future<List<Carro>> getCarros() async {
+    // select * from carro c,favorito f where c.id = f.id
+    List<Carro> carros = await CarroDAO().query("select * from carro c,favorito f where c.id = f.id");
 
     return carros;
   }
 
+  static Future<bool> isFavorito(Carro c) async {
+    final dao = FavoritoDAO();
+
+    bool exists = await dao.exists(c.id);
+
+    return exists;
+  }
 }

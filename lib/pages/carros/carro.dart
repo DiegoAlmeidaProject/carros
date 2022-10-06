@@ -1,5 +1,4 @@
-
-import '../../utils/sql/entity.dart';
+import 'package:carros/utils/sql/entity.dart';
 
 class Carro extends Entity {
   int id;
@@ -50,4 +49,5 @@ class Carro extends Entity {
   String toString() {
     return 'Carro{id: $id, nome: $nome}';
   }
+
 }

@@ -1,10 +1,8 @@
 import 'package:carros/pages/carros/carro.dart';
-import 'package:carros/pages/carros/carros_bloc.dart';
 import 'package:carros/pages/carros/carros_listview.dart';
+import 'package:carros/pages/favoritos/favoritos_bloc.dart';
 import 'package:carros/widgets/text_error.dart';
 import 'package:flutter/material.dart';
-
-import 'favoritos_bloc.dart';
 
 class FavoritosPage extends StatefulWidget {
   @override
@@ -34,7 +32,7 @@ class _FavoritosPageState extends State<FavoritosPage>
       stream: _bloc.stream,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return TextError("Não foi possível buscar os carros favoritados!");
+          return TextError("Não foi possível buscar os carros");
         }
 
         if (!snapshot.hasData) {
