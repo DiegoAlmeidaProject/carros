@@ -39,7 +39,7 @@ class _CarroPageState extends State<CarroPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: false, 
+        centerTitle: false,
         title: Text(widget.carro.nome),
         actions: <Widget>[
           IconButton(
