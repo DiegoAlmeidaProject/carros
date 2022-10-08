@@ -8,6 +8,8 @@ import 'package:carros/widgets/app_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../utils/nav.dart';
+
 class CarroFormPage extends StatefulWidget {
   final Carro carro;
 
@@ -210,7 +212,9 @@ class _CarroFormPageState extends State<CarroFormPage> {
     ApiResponse<bool> response = await CarrosApi.save(c);
 
     if (response.ok) {
-      alert(context, "Carro salvo com sucesso");
+      alert(context, "Carro salvo com sucesso", callback: (){
+        pop(context);
+      });
     } else {
       alert(context, response.msg);
     }
