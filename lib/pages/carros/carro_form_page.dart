@@ -116,10 +116,12 @@ class _CarroFormPageState extends State<CarroFormPage> {
     );
   }
 
+  //TODO : metodo de validação de imagem url x local
   _headerFoto() {
     return carro != null
         ? CachedNetworkImage(
-            imageUrl: carro.urlFoto,
+            imageUrl: carro.urlFoto ??
+                "https://s3-sa-east-1.amazonaws.com/videos.livetouchdev.com.br/esportivos/Renault_Megane_Trophy.png",
           )
         : Image.asset(
             "assets/images/camera.png",
