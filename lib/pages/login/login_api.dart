@@ -21,7 +21,7 @@ class LoginApi {
       String s = json.encode(params);
       print(">> $s");
 
-      var response = await http.post(url, body: s, headers: headers);
+      var response = await http.post(Uri.parse(url), body: s, headers: headers);
 
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');

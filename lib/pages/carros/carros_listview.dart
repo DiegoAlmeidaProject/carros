@@ -29,7 +29,7 @@ class CarrosListView extends StatelessWidget {
                     child: CachedNetworkImage(
                       imageUrl:
                       c.urlFoto ??
-                          "https://s3-sa-east-1.amazonaws.com/videos.livetouchdev.com.br/esportivos/Renault_Megane_Trophy.png",
+                          "http://www.livroandroid.com.br/livro/carros/esportivos/Ferrari_FF.png",
                       width: 250,
                     ),
                   ),

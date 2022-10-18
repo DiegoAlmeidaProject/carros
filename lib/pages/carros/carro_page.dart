@@ -87,7 +87,7 @@ class _CarroPageState extends State<CarroPage> {
         children: <Widget>[
           CachedNetworkImage(
               imageUrl:widget.carro.urlFoto ??
-                  "https://s3-sa-east-1.amazonaws.com/videos.livetouchdev.com.br/esportivos/Renault_Megane_Trophy.png",),
+                  "http://www.livroandroid.com.br/livro/carros/esportivos/Ferrari_FF.png"),
           _bloco1(),
           Divider(),
           _bloco2(),
@@ -100,14 +100,12 @@ class _CarroPageState extends State<CarroPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              text(widget.carro.nome, fontSize: 20, bold: true),
-              text(widget.carro.tipo, fontSize: 16)
-            ],
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            text(widget.carro.nome, fontSize: 20, bold: true),
+            text(widget.carro.tipo, fontSize: 16)
+          ],
         ),
         Row(
           children: <Widget>[
@@ -178,7 +176,7 @@ class _CarroPageState extends State<CarroPage> {
   }
 
   void _onClickFavorito() async {
-    bool favorito = await FavoritoService.favoritar(carro);
+    bool favorito = await FavoritoService.favoritar(context, carro);
 
     setState(() {
       color = favorito ? Colors.red : Colors.grey;
@@ -187,19 +185,17 @@ class _CarroPageState extends State<CarroPage> {
 
   void _onClickShare() {}
 
-
   void deletar() async {
     ApiResponse<bool> response = await CarrosApi.delete(carro);
 
-    if (response.ok) {
-      alert(context, "Carro deletado com sucesso", callback: () {
+    if(response.ok) {
+      alert(context, "Carro deletado com sucesso", callback: (){
         pop(context);
-      },);
+      });
     } else {
       alert(context, response.msg);
     }
   }
-
 
   @override
   void dispose() {
@@ -207,5 +203,4 @@ class _CarroPageState extends State<CarroPage> {
 
     _loripsumApiBloc.dispose();
   }
-
 }
