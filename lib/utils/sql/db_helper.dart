@@ -48,7 +48,7 @@ class DatabaseHelper {
     print("_onUpgrade: oldVersion: $oldVersion > newVersion: $newVersion");
 
     if(oldVersion == 1 && newVersion == 2) {
-     // await db.execute("alter table carro add column NOVA TEXT");
+      await db.execute("alter table carro add column NOVA TEXT");
     }
   }
 

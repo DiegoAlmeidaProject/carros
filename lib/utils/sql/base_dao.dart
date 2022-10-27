@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:carros/utils/sql/db_helper.dart';
-import 'package:sqflite/sqflite.dart';
 
-import 'entity.dart';
+import 'package:carros/utils/sql/db_helper.dart';
+import 'package:carros/utils/sql/entity.dart';
+import 'package:sqflite/sqflite.dart';
 
 // Data Access Object
 abstract class BaseDAO<T extends Entity> {
@@ -11,7 +11,7 @@ abstract class BaseDAO<T extends Entity> {
 
   String get tableName;
 
-  T fromMap(Map<String, dynamic> map);
+  T fromMap(Map<String,dynamic> map);
 
   Future<int> save(T entity) async {
     var dbClient = await db;
@@ -21,13 +21,12 @@ abstract class BaseDAO<T extends Entity> {
     return id;
   }
 
-  Future<List<T>> query(String sql, [List<dynamic> arguments]) async {
+  Future<List<T>> query(String sql,[List<dynamic> arguments]) async {
     final dbClient = await db;
 
-    final list = await dbClient.rawQuery(sql, arguments);
+    final list = await dbClient.rawQuery(sql,arguments);
 
     return list.map<T>((json) => fromMap(json)).toList();
-
   }
 
   Future<List<T>> findAll() {
@@ -36,10 +35,10 @@ abstract class BaseDAO<T extends Entity> {
 
   Future<T> findById(int id) async {
     List<T> list =
-      await  query('select * from $tableName where id = ?', [id]);
+    await query('select * from $tableName where id = ?', [id]);
 
-    return list.length > 0 ? list.first: null;
-    }
+    return list.length > 0 ? list.first : null;
+  }
 
   Future<bool> exists(int id) async {
     T c = await findById(id);

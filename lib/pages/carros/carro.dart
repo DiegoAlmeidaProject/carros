@@ -1,5 +1,22 @@
-import 'package:carros/utils/sql/entity.dart';
 import 'dart:convert' as convert;
+
+import 'package:carros/utils/event_bus.dart';
+import 'package:carros/utils/sql/entity.dart';
+
+class CarroEvent extends Event {
+  // salvar, deletar
+  String acao;
+
+  // classicos, esportivos, luxo
+  String tipo;
+
+  CarroEvent(this.acao, this.tipo);
+
+  @override
+  String toString() {
+    return 'CarroEvent{acao: $acao, tipo: $tipo}';
+  }
+}
 
 class Carro extends Entity {
   int id;
@@ -46,7 +63,6 @@ class Carro extends Entity {
     return data;
   }
 
-
   String toJson() {
     String json = convert.json.encode(toMap());
     return json;
@@ -54,7 +70,7 @@ class Carro extends Entity {
 
   @override
   String toString() {
-    return 'Carro{id: $id, nome: $nome, tipo: $tipo, desc: $descricao}';
+    return 'Carro{id: $id, nome: $nome, tipo: $tipo, descricao: $descricao, urlFoto: $urlFoto, urlVideo: $urlVideo, latitude: $latitude, longitude: $longitude}';
   }
 
 
