@@ -7,9 +7,11 @@ import 'package:carros/pages/carros/carros_api.dart';
 import 'package:carros/pages/carros/loripsum_api.dart';
 import 'package:carros/pages/favoritos/favorito_service.dart';
 import 'package:carros/utils/alert.dart';
+import 'package:carros/utils/event_bus.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/text.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CarroPage extends StatefulWidget {
   Carro carro;
@@ -100,14 +102,12 @@ class _CarroPageState extends State<CarroPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Expanded( //Corrigido layout Favorito-compartilhar deslocado a esquerda
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              text(widget.carro.nome, fontSize: 20, bold: true),
-              text(widget.carro.tipo, fontSize: 16)
-            ],
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            text(widget.carro.nome, fontSize: 20, bold: true),
+            text(widget.carro.tipo, fontSize: 16)
+          ],
         ),
         Row(
           children: <Widget>[
@@ -161,7 +161,15 @@ class _CarroPageState extends State<CarroPage> {
 
   void _onClickMapa() {}
 
-  void _onClickVideo() {}
+  void _onClickVideo() {
+    if(carro.urlVideo != null && carro.urlVideo.isNotEmpty) {
+      launch(carro.urlVideo);
+
+//      push(context, VideoPage(carro));
+    } else {
+      alert(context, "Este carro não possui nenhum vídeo");
+    }
+  }
 
   _onClickPopupMenu(String value) {
     switch (value) {
@@ -192,6 +200,8 @@ class _CarroPageState extends State<CarroPage> {
 
     if(response.ok) {
       alert(context, "Carro deletado com sucesso", callback: (){
+        EventBus.get(context).sendEvent(CarroEvent("carro_deletado",carro.tipo));
+
         pop(context);
       });
     } else {
