@@ -14,6 +14,8 @@ class VideoPage extends StatefulWidget {
 class _VideoPageState extends State<VideoPage> {
   VideoPlayerController _controller;
 
+  Carro get carro => widget.carro;
+
   @override
   void initState() {
     super.initState();
@@ -35,7 +37,7 @@ class _VideoPageState extends State<VideoPage> {
         title: Text(widget.carro.nome),
       ),
       body: Center(
-        child: _controller.value.initialized
+        child: _controller.value.isInitialized
             ? AspectRatio(
           aspectRatio: _controller.value.aspectRatio,
           child: VideoPlayer(_controller),

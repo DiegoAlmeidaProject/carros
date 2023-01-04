@@ -7,7 +7,9 @@
       <key>NSAllowsArbitraryLoads</key>
       <true/>
     </dict>
-
+    <key>io.flutter.embedded_views_preview</key>
+    <string>YES</string>
+    <string>Esse aplicativo precisa tirar fotos</string>
     <key>NSCameraUsageDescription</key>
     <string>Esse aplicativo precisa tirar fotos</string>
     <key>NSMicrophoneUsageDescription</key>

@@ -5,11 +5,13 @@ import 'package:carros/pages/carros/carro.dart';
 import 'package:carros/pages/carros/carro_form_page.dart';
 import 'package:carros/pages/carros/carros_api.dart';
 import 'package:carros/pages/carros/loripsum_api.dart';
+import 'package:carros/pages/carros/video_page.dart';
 import 'package:carros/pages/favoritos/favorito_service.dart';
 import 'package:carros/utils/alert.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/text.dart';
 import 'package:flutter/material.dart';
+
 
 class CarroPage extends StatefulWidget {
   Carro carro;
@@ -53,7 +55,9 @@ class _CarroPageState extends State<CarroPage> {
           ),
           IconButton(
             icon: Icon(Icons.videocam),
-            onPressed: _onClickVideo,
+            onPressed: () {
+              _onClickVideo(context);
+              },
           ),
           PopupMenuButton<String>(
             onSelected: _onClickPopupMenu,
@@ -159,7 +163,18 @@ class _CarroPageState extends State<CarroPage> {
 
   void _onClickMapa() {}
 
-  void _onClickVideo() {}
+  void _onClickVideo(context) {
+    if (carro.urlVideo != null && carro.urlVideo.isNotEmpty) {
+      //launch(carro.urlVideo); //Abre a URL do navegador padrão do celular.
+      push(context, VideoPage(carro)); // AppPlay video de carro.
+    } else {
+      alert(
+          context,
+          "Erro",
+      );
+     }
+    }
+
 
   _onClickPopupMenu(String value) {
     switch (value) {
