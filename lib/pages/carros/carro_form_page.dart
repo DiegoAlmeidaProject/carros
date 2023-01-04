@@ -7,7 +7,6 @@ import 'package:carros/pages/carros/carros_api.dart';
 import 'package:carros/utils/alert.dart';
 import 'package:carros/widgets/app_button.dart';
 import 'package:carros/widgets/app_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -53,7 +52,7 @@ class _CarroFormPageState extends State<CarroFormPage> {
     // Copia os dados do carro para o form
     if (carro != null) {
       tNome.text = carro.nome;
-      tDesc.text = carro.descricao;
+      tDesc.text = carro.desc;
       _radioIndex = getTipoInt(carro);
     }
   }
@@ -228,7 +227,7 @@ class _CarroFormPageState extends State<CarroFormPage> {
     // Cria o carro
     var c = carro ?? Carro();
     c.nome = tNome.text;
-    c.descricao = tDesc.text;
+    c.desc = tDesc.text;
     c.tipo = _getTipo();
 
     print("Carro: $c");
@@ -242,11 +241,11 @@ class _CarroFormPageState extends State<CarroFormPage> {
     ApiResponse<bool> response = await CarrosApi.save(c, _file);
 
     if (response.ok) {
-      alert(context, "Carro salvo com sucesso", callback: (){
+      alert(context, "Carro salvo com sucesso", "", callback: (){
         pop(context);
       });
     } else {
-      alert(context, response.msg);
+      alert(context, response.msg, "");
     }
 
     await Future.delayed(Duration(seconds: 3));

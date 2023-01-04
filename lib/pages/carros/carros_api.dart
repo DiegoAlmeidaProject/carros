@@ -25,7 +25,7 @@ class CarrosApi {
 
     List list = convert.json.decode(json);
 
-    List<Carro> carros = list.map<Carro>((map) => Carro.fromMap(map)).toList();
+    List<Carro> carros = list.map<Carro>((map) => Carro.fromJson(map)).toList();
 
     return carros;
   }
@@ -62,7 +62,7 @@ class CarrosApi {
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map mapResponse = convert.json.decode(response.body);
 
-        Carro carro = Carro.fromMap(mapResponse);
+        Carro carro = Carro.fromJson(mapResponse);
 
         print("Novo carro: ${carro.id}");
 

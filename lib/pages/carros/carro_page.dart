@@ -7,6 +7,7 @@ import 'package:carros/pages/carros/carros_api.dart';
 import 'package:carros/pages/carros/loripsum_api.dart';
 import 'package:carros/pages/carros/video_page.dart';
 import 'package:carros/pages/favoritos/favorito_service.dart';
+import 'package:carros/pages/mapa_page.dart';
 import 'package:carros/utils/alert.dart';
 import 'package:carros/utils/nav.dart';
 import 'package:carros/widgets/text.dart';
@@ -51,7 +52,9 @@ class _CarroPageState extends State<CarroPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.place),
-            onPressed: _onClickMapa,
+            onPressed: () {
+              _onClickMapa();
+            },
           ),
           IconButton(
             icon: Icon(Icons.videocam),
@@ -141,7 +144,7 @@ class _CarroPageState extends State<CarroPage> {
         SizedBox(
           height: 20,
         ),
-        text(widget.carro.descricao, fontSize: 16, bold: true),
+        text(widget.carro.desc, fontSize: 16, bold: true),
         SizedBox(
           height: 20,
         ),
@@ -161,7 +164,17 @@ class _CarroPageState extends State<CarroPage> {
     );
   }
 
-  void _onClickMapa() {}
+  void _onClickMapa() {
+    if (carro.latitude != null && carro.longitude != null) {
+      push(context, MapaPage(carro));
+    } else {
+      alert(
+        context,
+        "Erro",
+        "Esse carro não possui nenhuma latitude",
+      );
+    }
+  }
 
   void _onClickVideo(context) {
     if (carro.urlVideo != null && carro.urlVideo.isNotEmpty) {
@@ -171,6 +184,7 @@ class _CarroPageState extends State<CarroPage> {
       alert(
           context,
           "Erro",
+          "Esse carro não possui nenhum video !",
       );
      }
     }
@@ -204,11 +218,11 @@ class _CarroPageState extends State<CarroPage> {
     ApiResponse<bool> response = await CarrosApi.delete(carro);
 
     if(response.ok) {
-      alert(context, "Carro deletado com sucesso", callback: (){
+      alert(context, "Carro deletado com sucesso", "", callback: (){
         pop(context);
       });
     } else {
-      alert(context, response.msg);
+      alert(context, response.msg, "");
     }
   }
 

@@ -1,8 +1,7 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-alert(BuildContext context, String msg, {Function callback}) {
+alert(BuildContext context, String msg, String msg2, {Function callback}) {
   showDialog(
       context: context,
       barrierDismissible: false,

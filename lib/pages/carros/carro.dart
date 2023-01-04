@@ -1,36 +1,47 @@
 import 'dart:convert' as convert;
+import 'dart:convert';
 
 import 'package:carros/utils/sql/entity.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Carro extends Entity {
   int id;
   String nome;
   String tipo;
-  String descricao;
+  String desc;
   String urlFoto;
   String urlVideo;
   String latitude;
   String longitude;
 
+  latlng() {
+    return LatLng(
+    latitude == null || latitude.isEmpty ? 0.0 : double.parse(latitude),
+    longitude == null || longitude.isEmpty ? 0.0 : double.parse(longitude)
+    );
+  }
+
   Carro(
       {this.id,
         this.nome,
         this.tipo,
-        this.descricao,
+        this.desc,
         this.urlFoto,
         this.urlVideo,
         this.latitude,
         this.longitude});
 
-  Carro.fromMap(Map<String, dynamic> map) {
-    id = map['id'];
-    nome = map['nome'];
-    tipo = map['tipo'];
-    descricao = map['descricao'];
-    urlFoto = map['urlFoto'];
-    urlVideo = map['urlVideo'];
-    latitude = map['latitude'];
-    longitude = map['longitude'];
+  factory Carro.fromJson(Map<String, dynamic> json) {
+    return Carro(
+    id: json['id'] as int,
+    nome: json['nome'] as String,
+    tipo: json['tipo'] as String,
+    desc: json['desc'] as String,
+    urlFoto: json['urlFoto'] as String,
+    urlVideo: json['urlVideo'] as String,
+    latitude: json['latitude'] as String,
+    longitude: json['longitude'] as String,
+    );
   }
 
   @override
@@ -39,7 +50,7 @@ class Carro extends Entity {
     data['id'] = this.id;
     data['nome'] = this.nome;
     data['tipo'] = this.tipo;
-    data['descricao'] = this.descricao;
+    data['desc'] = this.desc;
     data['urlFoto'] = this.urlFoto;
     data['urlVideo'] = this.urlVideo;
     data['latitude'] = this.latitude;
@@ -54,7 +65,7 @@ class Carro extends Entity {
 
   @override
   String toString() {
-    return 'Carro{id: $id, nome: $nome, tipo: $tipo, descricao: $descricao, urlFoto: $urlFoto, urlVideo: $urlVideo, latitude: $latitude, longitude: $longitude}';
+    return 'Carro{id: $id, nome: $nome, tipo: $tipo, desc: $desc, urlFoto: $urlFoto, urlVideo: $urlVideo, latitude: $latitude, longitude: $longitude}';
   }
 
 
