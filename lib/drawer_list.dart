@@ -1,3 +1,4 @@
+import 'package:carros/firebase/firebase_service.dart';
 import 'package:carros/pages/login/login_page.dart';
 import 'package:carros/pages/login/usuario.dart';
 import 'package:carros/utils/nav.dart';
@@ -5,14 +6,14 @@ import 'package:flutter/material.dart';
 
 class DrawerList extends StatelessWidget {
 
-
   UserAccountsDrawerHeader _header(Usuario user) {
     return UserAccountsDrawerHeader(
-      accountName: Text(user.nome),
+      accountName: Text(user.nome ?? ""),
       accountEmail: Text(user.email),
-      currentAccountPicture: CircleAvatar(
+      currentAccountPicture: user.urlFoto != null ?
+      CircleAvatar(
         backgroundImage: NetworkImage(user.urlFoto),
-      ),
+      ) : FlutterLogo(),
     );
   }
 
@@ -24,15 +25,15 @@ class DrawerList extends StatelessWidget {
     return SafeArea(
       child: Drawer(
         child: ListView(
-          children: <Widget> [
+          children: <Widget>[
             FutureBuilder<Usuario>(
-                future: future, builder: (BuildContext context, AsyncSnapshot snapshot) {
+              future: future, builder: (context, snapshot) {
 
-                  Usuario user = snapshot.data;
+              Usuario user = snapshot.data;
 
-                  return user != null ? _header(user) : Container();
-
+              return user != null ? _header(user) : Container();
             },
+
             ),
             ListTile(
               leading: Icon(Icons.star),
@@ -50,7 +51,7 @@ class DrawerList extends StatelessWidget {
               subtitle: Text("mais informações..."),
               trailing: Icon(Icons.arrow_forward),
               onTap: () {
-                print("Item 2");
+                print("Item 1");
                 Navigator.pop(context);
               },
             ),
@@ -66,9 +67,9 @@ class DrawerList extends StatelessWidget {
     );
   }
 
-
   _onClickLogout(BuildContext context) {
     Usuario.clear();
+    FirebaseService().logout();
     Navigator.pop(context);
     push(context, LoginPage(), replace: true);
   }

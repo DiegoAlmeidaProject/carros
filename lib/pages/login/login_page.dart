@@ -1,3 +1,4 @@
+import 'package:carros/firebase/firebase_service.dart';
 import 'package:carros/pages/api_response.dart';
 import 'package:carros/pages/carros/home_page.dart';
 import 'package:carros/pages/login/login_bloc.dart';
@@ -95,6 +96,17 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  _onClickGoogle() async {
+    final service = FirebaseService();
+    ApiResponse response = await service.loginGoogle();
+
+    if (response.ok) {
+      push(context, HomePage(), replace: true);
+    } else {
+      alert(context, response.msg, "");
+    }
+  }
+
   _onClickLogin() async {
     bool formaOk = _formKey.currentState?.validate();
     if (!formaOk) {
@@ -146,7 +158,4 @@ class _LoginPageState extends State<LoginPage> {
     _bloc.dispose();
   }
 
-  void _onClickGoogle() {
-    print("Google!");
-  }
 }
